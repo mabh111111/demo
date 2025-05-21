@@ -5,42 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linux Package Manager</title>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        .output { white-space: pre-wrap; background-color: #f4f4f4; border: 1px solid #ddd; padding: 10px; margin-top: 10px; max-height: 400px; overflow-y: auto; }
-        .error { color: red; }
-        .success { color: green; }
-        input[type="text"], button { padding: 8px; margin-right: 5px; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background-color: #f0f2f5; 
+            color: #333;
+            line-height: 1.6;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 20px auto; 
+            background-color: #ffffff; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .output { 
+            white-space: pre-wrap; 
+            background-color: #282c34; /* Darker background for output */
+            color: #abb2bf; /* Lighter text for output */
+            border: 1px solid #3c4048; 
+            padding: 12px; 
+            margin-top: 10px; 
+            max-height: 450px; 
+            overflow-y: auto; 
+            border-radius: 5px; 
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.9em;
+        }
+        .output div { /* Style for individual log lines inside output */
+            padding: 3px 0;
+            border-bottom: 1px solid #3c4048;
+        }
+        .output div:last-child {
+            border-bottom: none;
+        }
+        .error { 
+            color: #ff6b6b; /* Brighter red for errors */
+            font-weight: bold; 
+        }
+        .success { 
+            color: #69f0ae; /* Material green for success */
+        }
+        input[type="text"] { 
+            padding: 10px; 
+            margin-right: 8px; 
+            border: 1px solid #d1d5da; 
+            border-radius: 5px; 
+            font-size: 1em;
+            flex-grow: 1; /* Allow input to take available space */
+        }
+        button { 
+            padding: 10px 15px; 
+            margin-right: 8px; 
+            margin-top: 8px; /* Added margin-top for all buttons */
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 1em;
+            transition: background-color 0.2s ease-in-out;
+        }
+        button:hover { 
+            background-color: #0056b3; 
+        }
+        button:active {
+            background-color: #004085;
+        }
+        
+        .section-box {
+            background-color: #f9fafb; /* Slightly different background for sections */
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        #distro-info p { 
+            margin: 6px 0; 
+            font-size: 0.95em;
+        }
+        h1, h2 { 
+            margin-top: 0; 
+            margin-bottom: 15px; 
+            color: #1f2937; 
+        }
+        h1 { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            color: #0056b3; /* Match button hover for consistency */
+        }
+        h2 {
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-bottom: 20px; /* More space after H2 */
+        }
+        hr { 
+            margin-top: 25px; 
+            margin-bottom: 25px; 
+            border: 0; 
+            border-top: 1px solid #d1d5da; 
+        }
+
+        .package-controls-input-group {
+            display: flex; /* Use flexbox for input and first button */
+            align-items: center;
+            margin-bottom: 10px; /* Space below the input group */
+        }
+        .package-controls-input-group input[type="text"] {
+            margin-right: 8px; /* Keep margin for the input */
+            margin-top: 0; /* Reset margin-top for input in this group */
+        }
+         .package-controls-input-group button {
+            margin-top: 0; /* Reset margin-top for the first button in group */
+         }
+
+        .package-controls-buttons button, .system-operations-buttons button {
+            margin-left: 0; /* Ensure buttons align left if they wrap */
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Linux Web Package Manager</h1>
 
-        <div id="distro-info">
+        <div id="distro-info" class="section-box">
             <h2>Distribution Information</h2>
             <p>Loading...</p>
         </div>
 
         <hr>
 
-        <div>
+        <div class="section-box package-controls">
             <h2>Package Operations</h2>
-            <input type="text" id="packageName" placeholder="Enter package name">
-            <button onclick="searchPackage()">Search</button>
-            <button onclick="installPackage()">Install</button>
-            <button onclick="removePackage()">Remove</button>
+            <div class="package-controls-input-group">
+                <input type="text" id="packageName" placeholder="Enter package name">
+                <button onclick="searchPackage()">Search</button>
+            </div>
+            <div class="package-controls-buttons"> 
+                <button onclick="installPackage()">Install</button>
+                <button onclick="removePackage()">Remove</button>
+            </div>
         </div>
         
-        <div>
+        <div class="section-box system-operations"> <!-- Added class for potential specific styling -->
             <h2>System Operations</h2>
-            <button onclick="updateDatabase()">Update Package Database</button>
-            <button onclick="listPackages()">List Installed Packages</button>
+            <div class="system-operations-buttons">
+                <button onclick="updateDatabase()">Update Package Database</button>
+                <button onclick="listPackages()">List Installed Packages</button>
+            </div>
         </div>
 
-        <h2>Output</h2>
-        <div id="outputArea" class="output">
-            Ready.
+        <div class="section-box"> <!-- Applied section-box to Output as well -->
+            <h2>Output</h2>
+            <div id="outputArea" class="output">
+                Ready.
+            </div>
         </div>
     </div>
 
