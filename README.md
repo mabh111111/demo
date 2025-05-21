@@ -17,8 +17,9 @@ This project is a web-based interface for managing packages on Linux servers. It
 1.  **Clone the repository (if applicable) or ensure all files are in a directory.**
 
 2.  **Create a Python virtual environment (recommended):**
+    This project requires Python 3.5 or newer. The application has been adjusted to ensure compatibility with versions that do not support certain newer features of the `subprocess` module.
     ```bash
-    python3 -m venv venv
+    python3 -m venv venv  # Ensure your python3 points to version 3.5 or higher
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 

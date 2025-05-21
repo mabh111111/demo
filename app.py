@@ -30,10 +30,10 @@ def api_search_package(package_name):
 
     try:
         # Ensure text=True for string output, capture_output=True
-        process = subprocess.run(command_parts, capture_output=True, text=True, check=False) # check=False to handle errors manually
+        process = subprocess.run(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False) # text=False (or removed), capture_output removed
         
-        stdout_str = process.stdout.strip()
-        stderr_str = process.stderr.strip()
+        stdout_str = process.stdout.decode('utf-8', errors='replace').strip()
+        stderr_str = process.stderr.decode('utf-8', errors='replace').strip()
 
         if process.returncode == 0:
             return jsonify({"success": True, "package_name": package_name, "output": stdout_str})
@@ -61,10 +61,10 @@ def api_install_package(package_name):
     command_parts.append(package_name)
 
     try:
-        process = subprocess.run(command_parts, capture_output=True, text=True, check=False)
+        process = subprocess.run(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         
-        stdout_str = process.stdout.strip()
-        stderr_str = process.stderr.strip()
+        stdout_str = process.stdout.decode('utf-8', errors='replace').strip()
+        stderr_str = process.stderr.decode('utf-8', errors='replace').strip()
 
         if process.returncode == 0:
             # Some package managers might output to stderr even on success (e.g., warnings)
@@ -106,10 +106,10 @@ def api_remove_package(package_name):
     command_parts.append(package_name)
 
     try:
-        process = subprocess.run(command_parts, capture_output=True, text=True, check=False)
+        process = subprocess.run(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         
-        stdout_str = process.stdout.strip()
-        stderr_str = process.stderr.strip()
+        stdout_str = process.stdout.decode('utf-8', errors='replace').strip()
+        stderr_str = process.stderr.decode('utf-8', errors='replace').strip()
 
         if process.returncode == 0:
             return jsonify({
@@ -145,10 +145,10 @@ def api_update_packages():
     command_parts = update_command_str.split()
 
     try:
-        process = subprocess.run(command_parts, capture_output=True, text=True, check=False)
+        process = subprocess.run(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         
-        stdout_str = process.stdout.strip()
-        stderr_str = process.stderr.strip()
+        stdout_str = process.stdout.decode('utf-8', errors='replace').strip()
+        stderr_str = process.stderr.decode('utf-8', errors='replace').strip()
 
         if process.returncode == 0:
             return jsonify({
@@ -182,10 +182,10 @@ def api_list_packages():
     command_parts = list_command_str.split()
 
     try:
-        process = subprocess.run(command_parts, capture_output=True, text=True, check=False)
+        process = subprocess.run(command_parts, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         
-        stdout_str = process.stdout.strip()
-        stderr_str = process.stderr.strip()
+        stdout_str = process.stdout.decode('utf-8', errors='replace').strip()
+        stderr_str = process.stderr.decode('utf-8', errors='replace').strip()
 
         if process.returncode == 0:
             # The output might be very large. Frontend should handle displaying it.
